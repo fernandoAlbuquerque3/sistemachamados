@@ -2,7 +2,7 @@
 function App() {
   return (
     <div>
-      <h1>TESTE</h1>
+      <h1>Sistema de chamado</h1>
     </div>
   );
 }

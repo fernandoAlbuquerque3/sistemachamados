@@ -1,10 +1,11 @@
-
+import { BrowserRouter } from "react-router-dom"
+import RoutesApp from "./routes"
 function App() {
-  return (
-    <div>
-      <h1>Sistema de chamado</h1>
-    </div>
-  );
+   return (
+      <BrowserRouter>
+         <RoutesApp />
+      </BrowserRouter>
+   )
 }
 
-export default App;
+export default App

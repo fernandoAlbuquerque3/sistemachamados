@@ -1,6 +1,6 @@
-import { useState, useContext } from "react"
+import { useState, useContext, useEffect } from "react"
 
-import { Link } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import { AuthContext } from "../../contexts/auth"
 import "./signin.css"
 
@@ -10,7 +10,7 @@ function SignIn() {
    const [email, setEmail] = useState("")
    const [password, setPassword] = useState("")
 
-   const { signIn, loadingAuth } = useContext(AuthContext)
+   const { signIn, loadingAuth, signed } = useContext(AuthContext)
 
    async function handleSignIn(e) {
       e.preventDefault()

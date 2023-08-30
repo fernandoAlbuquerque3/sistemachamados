@@ -4,11 +4,9 @@ import { AuthContext } from "../../contexts/auth"
 import Header from "../../components/Header"
 import Title from "../../components/Title"
 
-
 import { db, storage } from "../../services/firebaseConnection"
 import { doc, updateDoc } from "firebase/firestore"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
-
 
 import { FiSettings, FiUpload } from "react-icons/fi"
 import avatar from "../../assests/avatar.png"

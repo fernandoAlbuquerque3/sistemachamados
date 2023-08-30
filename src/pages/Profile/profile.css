@@ -49,10 +49,11 @@ textarea,
 select {
    margin-bottom: 1em;
    padding: 0.7em;
-   border: 0;
+   border: 1px solid #c4c4c4;
    border-radius: 5px;
    max-width: 600px;
 }
+
 .form-profile input:disabled {
    cursor: not-allowed;
 }
@@ -70,4 +71,10 @@ select {
    display: flex;
    justify-content: center;
    align-items: center;
+   transition: all 0.4s;
+}
+
+.logout-btn:hover {
+   background-color: #b91c1c;
+   color: #fff;
 }

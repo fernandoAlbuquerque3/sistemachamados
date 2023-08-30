@@ -4,9 +4,15 @@ import { AuthContext } from "../../contexts/auth"
 import Header from "../../components/Header"
 import Title from "../../components/Title"
 
+
+import { db, storage } from "../../services/firebaseConnection"
+import { doc, updateDoc } from "firebase/firestore"
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
+
+
 import { FiSettings, FiUpload } from "react-icons/fi"
 import avatar from "../../assests/avatar.png"
-
+import { toast } from "react-toastify"
 import "./profile.css"
 
 function Profile() {
@@ -32,6 +38,58 @@ function Profile() {
       }
    }
 
+   async function handleUpload() {
+      const currentUid = user.uid
+
+      const uploadRef = ref(storage, `images/${currentUid}/${imageAvatar.name}`)
+
+      const uploadTask = uploadBytes(uploadRef, imageAvatar).then(
+         (snapshot) => {
+            getDownloadURL(snapshot.ref).then(async (downloadUrl) => {
+               let urlPhoto = downloadUrl
+               const docRef = doc(db, "users", user.uid)
+
+               await updateDoc(docRef, {
+                  avatarUrl: avatarUrl,
+                  nome: nome,
+               }).then(() => {
+                  let data = {
+                     ...user,
+                     nome: nome,
+                     avatarUrl: urlPhoto,
+                  }
+                  setUser(data)
+                  storageUser(data)
+                  toast.success("Perfil atualizado com sucesso!")
+               })
+            })
+         }
+      )
+   }
+
+   async function handleSubmit(e) {
+      e.preventDefault()
+      if (imageAvatar === null && nome !== "") {
+         //Update only name of user
+         const docRef = doc(db, "users", user.uid)
+
+         await updateDoc(docRef, {
+            nome: nome,
+         }).then(() => {
+            let data = {
+               ...user,
+               nome: nome,
+            }
+            setUser(data)
+            storageUser(data)
+            toast.success("Perfil atualizado com sucesso!")
+         })
+      } else if (nome !== "" && imageAvatar !== null) {
+         //Uptade name and user profile pic
+         handleUpload()
+      }
+   }
+
    return (
       <div>
          <Header />
@@ -40,7 +98,7 @@ function Profile() {
                <FiSettings size={25} />
             </Title>
 
-            <div className="container">
+            <div className="container" onSubmit={handleSubmit}>
                <form className="form-profile">
                   <label className="label-avatar">
                      <span>

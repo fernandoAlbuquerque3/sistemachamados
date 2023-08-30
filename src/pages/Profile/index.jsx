@@ -48,7 +48,7 @@ function Profile() {
                const docRef = doc(db, "users", user.uid)
 
                await updateDoc(docRef, {
-                  avatarUrl: avatarUrl,
+                  avatarUrl: urlPhoto,
                   nome: nome,
                }).then(() => {
                   let data = {

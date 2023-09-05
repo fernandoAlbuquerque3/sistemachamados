@@ -45,6 +45,7 @@ function Profile() {
          (snapshot) => {
             getDownloadURL(snapshot.ref).then(async (downloadUrl) => {
                let urlPhoto = downloadUrl
+
                const docRef = doc(db, "users", user.uid)
 
                await updateDoc(docRef, {
@@ -96,8 +97,8 @@ function Profile() {
                <FiSettings size={25} />
             </Title>
 
-            <div className="container" onSubmit={handleSubmit}>
-               <form className="form-profile">
+            <div className="container">
+               <form className="form-profile" onSubmit={handleSubmit}>
                   <label className="label-avatar">
                      <span>
                         <FiUpload color="#fff" size={25} />

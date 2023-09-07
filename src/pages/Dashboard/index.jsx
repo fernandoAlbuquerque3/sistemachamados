@@ -45,7 +45,42 @@ function Dashboard() {
                      <tr>
                         <td data-label="Cliente">Mercado esquina</td>
                         <td data-label="Assunto">Suporte</td>
-                        <td data-label="Status">Em aberto</td>
+                        <td data-label="Status">
+                           <span
+                              className="badge"
+                              style={{ backgroundColor: "#999" }}
+                           >
+                              Em aberto
+                           </span>
+                        </td>
+                        <td data-label="Cadastrado">12/05/2023</td>
+                        <td data-label="#">
+                           <button
+                              className="action"
+                              style={{ backgroundColor: "#3586f6" }}
+                           >
+                              <FiSearch color="#fff" size={17} />
+                           </button>
+                           <button
+                              className="action"
+                              style={{ backgroundColor: "#f6a935" }}
+                           >
+                              <FiEdit2 color="#fff" size={17} />
+                           </button>
+                        </td>
+                     </tr>
+
+                     <tr>
+                        <td data-label="Cliente">Fernando dev</td>
+                        <td data-label="Assunto">Suporte</td>
+                        <td data-label="Status">
+                           <span
+                              className="badge"
+                              style={{ backgroundColor: "#999" }}
+                           >
+                              Em aberto
+                           </span>
+                        </td>
                         <td data-label="Cadastrado">12/05/2023</td>
                         <td data-label="#">
                            <button

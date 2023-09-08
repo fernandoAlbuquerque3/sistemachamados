@@ -72,7 +72,7 @@ function Customers() {
                      value={endereco}
                      onChange={(e) => setEndereco(e.target.value)}
                   />
-                  <button type="submit">Cadastrar</button>
+                  <button type="submit">Cadastrar.</button>
                </form>
             </div>
          </div>

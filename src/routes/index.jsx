@@ -5,6 +5,7 @@ import SignUp from "../pages/SignUp"
 import Profile from "../pages/Profile"
 import Dashboard from "../pages/Dashboard"
 import Customers from "../pages/Customers"
+import New from "../pages/New"
 
 import Private from "./Private"
 
@@ -12,7 +13,9 @@ function RoutesApp() {
    return (
       <Routes>
          <Route path="/" element={<SignIn />} />
+         
          <Route path="/register" element={<SignUp />} />
+
          <Route
             path="/dashboard"
             element={
@@ -21,6 +24,7 @@ function RoutesApp() {
                </Private>
             }
          />
+
          <Route
             path="/profile"
             element={
@@ -29,6 +33,7 @@ function RoutesApp() {
                </Private>
             }
          />
+
          <Route
             path="/customers"
             element={
@@ -37,6 +42,12 @@ function RoutesApp() {
                </Private>
             }
          />
+
+         <Route path="/new" element={
+            <Private>
+               <New />
+            </Private>
+         } />
       </Routes>
    )
 }

@@ -1,24 +1,76 @@
-import { useState } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { AuthContext } from '../../contexts/auth'
 
 import Header from '../../components/Header'
 import Title from '../../components/Title'
 
-import {FiPlusCircle} from 'react-icons/fi'
+import { db } from '../../services/firebaseConnection'
+import { collection, getDocs, getDoc, doc } from 'firebase/firestore'
 
+import { FiPlusCircle } from 'react-icons/fi'
+import { toast } from 'react-toastify'
 import './new.css'
 
 function New() {
+    const {user} = useContext(AuthContext)
+
     const [customers, setCustomers] = useState([])
+    const [loadCustomer, setLoadCustumer] = useState(true)
+    const [customerSelected, setCustomerSelected] = useState(0)
 
     const [complemento, setComplemento] = useState('')
     const [assunto, setAssunto] = useState("Suporte")
     const [status, setStatus] = useState("Aberto")
+
+    useEffect(() => {
+        async function loadCustomers() {
+            const  listRef = collection(db, "customers")
+
+            const querySnapshot = await getDocs(listRef)
+            .then((snapshot) => {
+                let lista = [];
+
+                snapshot.forEach((doc) => {
+                    lista.push({
+                        id: doc.id,
+                        nomeFantasia: doc.data().nomeFantasia,
+                    })
+                })
+                
+                if(snapshot.docs.size === 0) {
+                    console.log("Nenhum cliente foi encontrado")
+                    setCustomers([{ id: "1", nomeFantasia: 'FREELA' }])
+                    setLoadCustumer(false)
+                    return;
+                }
+
+                setCustomers(lista)
+                setLoadCustumer(false)
+            })
+            .catch((error) => {   
+                console.log(error)
+                setLoadCustumer(false)
+                setCustomers([{ id: "1", nomeFantasia: 'FREELA' }])
+            })
+        }
+        loadCustomers()
+    }, [])
 
     function handleOptionsChange(e) {
         setStatus(e.target.value)
         console.log(e.target.value)
     }
 
+    function handleChangeSelect(e) {
+        setAssunto(e.target.value)
+        console.log(e.target.value)
+    }
+
+    function handleChangeCustomer(e) {
+        setCustomerSelected(e.target.value)
+        console.log(customers[e.target.value].nomeFantasia)
+    }
+    
     return (
         <div>
             <Header />
@@ -31,13 +83,26 @@ function New() {
                 <div className='container'>
                     <form className='form-profile'>
                         <label>Clientes</label>
-                        <select>
-                            <option key={1} value={1}>Mercado teste</option>
-                            <option key={2} value={2}>Loja informática</option>
-                        </select>
+                        {
+                            loadCustomer ? (
+                                <input type="text" disabled={true} value="Carregando clientes..."/>
+                            ) : (
+                                <select value={customerSelected} onChange={handleChangeCustomer}>
+                                    {
+                                       customers.map((item, index) => {
+                                        return (
+                                            <option value={index} key={index}>
+                                                {item.nomeFantasia}
+                                            </option>
+                                        )
+                                       })
+                                    }
+                                </select>
+                            )
+                        }
 
                         <label>Assunto</label>
-                        <select>
+                        <select value={assunto} onChange={handleChangeSelect}>
                             <option value="Suporte">Suporte</option>
                             <option value="Visita Tecnica">Visita Tecnica</option>
                             <option value="Financeiro">Financeiro</option>

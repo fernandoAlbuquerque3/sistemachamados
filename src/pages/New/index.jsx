@@ -5,14 +5,14 @@ import Header from '../../components/Header'
 import Title from '../../components/Title'
 
 import { db } from '../../services/firebaseConnection'
-import { collection, getDocs, getDoc, doc } from 'firebase/firestore'
+import { collection, getDocs, getDoc, doc, addDoc } from 'firebase/firestore'
 
 import { FiPlusCircle } from 'react-icons/fi'
 import { toast } from 'react-toastify'
 import './new.css'
 
 function New() {
-    const {user} = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
 
     const [customers, setCustomers] = useState([])
     const [loadCustomer, setLoadCustumer] = useState(true)
@@ -29,7 +29,6 @@ function New() {
             const querySnapshot = await getDocs(listRef)
             .then((snapshot) => {
                 let lista = [];
-
                 snapshot.forEach((doc) => {
                     lista.push({
                         id: doc.id,
@@ -46,6 +45,7 @@ function New() {
 
                 setCustomers(lista)
                 setLoadCustumer(false)
+                console.log(lista)
             })
             .catch((error) => {   
                 console.log(error)
@@ -70,6 +70,30 @@ function New() {
         setCustomerSelected(e.target.value)
         console.log(customers[e.target.value].nomeFantasia)
     }
+
+    async function handleRegister(e) {
+        e.preventDefault();
+
+        //registrar chamado
+        await addDoc(collection(db, "chamados"), {
+            created: new Date(),
+            cliente: customers[customerSelected].nomeFantasia,
+            clienteId: customers[customerSelected].id,
+            assunto: assunto,
+            complemento: complemento,
+            status: status,
+            userId: user.uid,
+        })
+        .then(() => {
+            toast.success("Chamado registrado com sucesso!")
+            setComplemento("")
+            setCustomerSelected(0)
+        })
+        .catch((error) => {
+            console.log(error)
+            toast.error("Não foi possível registrar o chamado, tente novamente!")
+        })
+    }
     
     return (
         <div>
@@ -81,7 +105,7 @@ function New() {
                 </Title>
 
                 <div className='container'>
-                    <form className='form-profile'>
+                    <form className='form-profile' onSubmit={handleRegister}>
                         <label>Clientes</label>
                         {
                             loadCustomer ? (

@@ -60,6 +60,7 @@ table th {
    letter-spacing: 0.1em;
    text-transform: uppercase;
 }
+
 table td .action {
    border: 0;
    padding: 5px;
@@ -78,13 +79,21 @@ table td .badge {
    color: #fff;
 }
 
+.dashboard span {
+   margin: 2em 0;
+   font-size: 1.2em;
+   font-weight: 600;
+}
+
 @media screen and (max-width: 600px) {
    table {
       border: 0;
    }
+
    table caption {
       font-size: 1.3em;
    }
+
    table thead {
       border: none;
       height: 1px;
@@ -94,17 +103,20 @@ table td .badge {
       position: absolute;
       width: 1px;
    }
+
    table tr {
       border-bottom: 3px solid #ddd;
       display: block;
       margin-bottom: 0.6em;
    }
+
    table td {
       border-bottom: 1px solid #ddd;
       display: block;
       font-size: 0.8em;
       text-align: right;
    }
+
    table td::before {
       content: attr(data-label);
       float: left;

@@ -49,7 +49,7 @@ function Dashboard() {
                complemento: doc.data().complemento,
             })
          })
-         setChamados(chamados => [...chamados, ...lista])
+         setChamados(chamados => [...chamados, ...lista]);
 
       } else {
          setIsEmpty(true)

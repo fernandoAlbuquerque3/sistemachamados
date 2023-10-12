@@ -13,7 +13,7 @@ function RoutesApp() {
    return (
       <Routes>
          <Route path="/" element={<SignIn />} />
-         
+
          <Route path="/register" element={<SignUp />} />
 
          <Route
@@ -44,6 +44,12 @@ function RoutesApp() {
          />
 
          <Route path="/new" element={
+            <Private>
+               <New />
+            </Private>
+         } />
+
+         <Route path="/new/:id" element={
             <Private>
                <New />
             </Private>

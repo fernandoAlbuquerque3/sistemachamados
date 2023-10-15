@@ -5,9 +5,9 @@ import Header from '../../components/Header'
 import Title from '../../components/Title'
 
 import { db } from '../../services/firebaseConnection'
-import { collection, getDocs, getDoc, doc, addDoc } from 'firebase/firestore'
+import { collection, getDocs, getDoc, doc, addDoc, updateDoc } from 'firebase/firestore'
 
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import { FiPlusCircle } from 'react-icons/fi'
 import { toast } from 'react-toastify'
@@ -17,6 +17,8 @@ function New() {
     const { user } = useContext(AuthContext);
     const { id } = useParams();
 
+    const navigate = useNavigate();
+
     const [customers, setCustomers] = useState([]);
     const [loadCustomer, setLoadCustumer] = useState(true);
     const [customerSelected, setCustomerSelected] = useState(0);
@@ -24,7 +26,7 @@ function New() {
     const [complemento, setComplemento] = useState('');
     const [assunto, setAssunto] = useState("Suporte");
     const [status, setStatus] = useState("Aberto");
-    
+
     const [idCustomer, setIdCustomer] = useState(false)
 
     useEffect(() => {
@@ -65,6 +67,7 @@ function New() {
     }, [id])
 
     async function loadId(lista) {
+        console.log(lista)
         const docRef = doc(db, "chamados", id);
 
         await getDoc(docRef)
@@ -102,7 +105,24 @@ function New() {
         e.preventDefault();
 
         if (idCustomer) {
-            alert("Editando chamado");
+            //Atualizar chamado
+            const docRef = doc(db, "chamados", id);
+
+            await updateDoc(docRef, {
+                cliente: customers[customerSelected].nomeFantasia,
+                clienteId: customers[customerSelected].id,
+                assunto: assunto,
+                complemento: complemento,
+                status: status,
+                userId: user.uid,
+            })
+                .then(() => {
+                    toast.success("Chamado atualizado com sucesso!");
+                    navigate('/dashboard')
+                }).catch((error) => {
+                    console.log(error);
+                    toast.error("Erro ao atualizar chamado!");
+                });
             return;
         }
 
@@ -132,7 +152,7 @@ function New() {
             <Header />
 
             <div className="content">
-                <Title name="Novo chamado">
+                <Title name={id ? 'Editando chamado' : "Novo chamado"}>
                     <FiPlusCircle size={25} />
                 </Title>
 
@@ -204,7 +224,9 @@ function New() {
                             onChange={(e) => setComplemento(e.target.value)}
                         />
 
-                        <button type='submit'>Registrar</button>
+                        <button type='submit'>
+                            {id ? 'Salvar alterações' : 'Registrar chamado'}
+                        </button>
                     </form>
                 </div>
 

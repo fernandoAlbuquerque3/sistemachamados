@@ -5,6 +5,7 @@ import { collection, getDocs, orderBy, limit, startAfter, query, getDoc } from "
 
 import Header from "../../components/Header"
 import Title from "../../components/Title"
+import Modal from "../../components/Modal"
 
 import { Link } from "react-router-dom"
 
@@ -20,6 +21,8 @@ function Dashboard() {
    const [isEmpty, setIsEmpty] = useState(false)
    const [lastDocs, setLastDocs] = useState()
    const [loadingMore, setLoadingMore] = useState(false)
+   const [showPostModal, setShowPostModal] = useState(false)
+   const [details, setDetails] = useState()
 
    const listRef = collection(db, "chamados");
    useEffect(() => {
@@ -76,6 +79,11 @@ function Dashboard() {
 
       await updateState(querySnapshot);
       setLoadingMore(false);
+   }
+
+   function toggleModal(item) {
+      setShowPostModal(!showPostModal);
+      setDetails(item)
    }
 
    if (loading) {
@@ -150,6 +158,7 @@ function Dashboard() {
                                        <td data-label="Cadastrado">{item.createdFormat}</td>
                                        <td data-label="#">
                                           <button
+                                             onClick={() => toggleModal(item)}
                                              className="action"
                                              style={{ backgroundColor: "#3586f6" }}
                                           >
@@ -181,6 +190,16 @@ function Dashboard() {
                )}
             </>
          </div>
+
+         {
+            showPostModal && (
+               <Modal
+                  modalContent={details}
+                  closeModal={() => setShowPostModal(!showPostModal)}
+               />
+            )
+         }
+
       </div>
    )
 }
